@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" role="img" aria-labelledby="title desc">
+  <title id="title">Anatomy of a Blueprint report</title>
+  <desc id="desc">Illustrative product report with Status KPI tiles, Watch it, New in this pass, Architecture, Product tour, Outputs, Test results, Fixed in this pass, Roadmap P1/P2/P3, and Run and reproduce. Every number comes from this run; failures are shown plainly. This is a schematic, not captured product evidence.</desc>
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#75d9ed" stroke-opacity=".07"/></pattern>
+    <clipPath id="card"><rect width="1200" height="640" rx="24"/></clipPath>
+  </defs>
+  <style>
+    text { font-family: -apple-system, "Segoe UI", Inter, Helvetica, Arial, sans-serif; fill: #f3f8ff; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; }
+    .muted { fill: #adcadf; } .cyan { fill: #75d9ed; }
+    .section { fill: #13315c; stroke: #75d9ed; stroke-opacity: .2; }
+  </style>
+  <rect width="1200" height="640" rx="24" fill="#0b2545"/>
+  <rect width="1200" height="640" fill="url(#grid)" clip-path="url(#card)"/>
+  <text x="40" y="43" class="mono cyan" font-size="12" letter-spacing="2" data-max-width="1100">04 / THE REPORT</text>
+  <text x="40" y="84" font-size="32" font-weight="700" data-max-width="1120">A readable record, not a victory lap.</text>
+  <rect x="292" y="109" width="592" height="486" rx="12" fill="#0b2545" stroke="#75d9ed" stroke-opacity=".65"/>
+  <path d="M292 138H884" stroke="#75d9ed" stroke-opacity=".3"/>
+  <g fill="#75d9ed" opacity=".65"><circle cx="309" cy="124" r="3"/><circle cx="320" cy="124" r="3"/><circle cx="331" cy="124" r="3"/></g>
+  <text x="352" y="128" class="mono muted" font-size="11" data-max-width="504">docs/blueprint/&lt;project&gt;-blueprint.html</text>
+  <g>
+    <rect x="308" y="150" width="560" height="65" rx="6" class="section"/>
+    <text x="322" y="171" font-size="16" font-weight="600" data-max-width="532">Status KPI tiles</text>
+    <rect x="322" y="181" width="166" height="25" rx="4" fill="#0b2545"/>
+    <rect x="498" y="181" width="166" height="25" rx="4" fill="#0b2545"/>
+    <rect x="674" y="181" width="180" height="25" rx="4" fill="#0b2545"/>
+    <text x="334" y="198" class="mono cyan" font-size="12" data-max-width="142">N/N checks</text>
+    <text x="510" y="198" class="mono cyan" font-size="12" data-max-width="142">N/N tests</text>
+    <text x="686" y="198" class="mono cyan" font-size="12" data-max-width="156">Measured perf</text>
+    <rect x="308" y="223" width="560" height="40" rx="6" class="section"/>
+    <text x="322" y="248" font-size="16" font-weight="600" data-max-width="260">Watch it</text>
+    <rect x="650" y="230" width="94" height="26" rx="4" fill="#0b2545" stroke="#75d9ed" stroke-opacity=".3"/>
+    <rect x="754" y="230" width="100" height="26" rx="4" fill="#0b2545" stroke="#75d9ed" stroke-opacity=".3"/>
+    <path d="M691 236L702 243L691 250ZM798 236L809 243L798 250Z" fill="#75d9ed"/>
+    <rect x="308" y="271" width="560" height="28" rx="6" class="section"/>
+    <text x="322" y="291" font-size="15" font-weight="600" data-max-width="300">New in this pass</text>
+    <text x="854" y="290" text-anchor="end" class="muted" font-size="12" data-max-width="200">Demo · before / after · limits</text>
+    <rect x="308" y="307" width="560" height="28" rx="6" class="section"/>
+    <text x="322" y="327" font-size="15" font-weight="600" data-max-width="300">Architecture</text>
+    <g fill="none" stroke="#75d9ed" stroke-opacity=".6">
+      <rect x="708" y="316" width="32" height="10" rx="2"/><rect x="765" y="316" width="32" height="10" rx="2"/><rect x="822" y="316" width="32" height="10" rx="2"/><path d="M740 321H765M797 321H822"/>
+    </g>
+    <rect x="308" y="343" width="560" height="28" rx="6" class="section"/>
+    <text x="322" y="363" font-size="15" font-weight="600" data-max-width="300">Product tour</text>
+    <g fill="#0b2545" stroke="#75d9ed" stroke-opacity=".3">
+      <rect x="708" y="350" width="42" height="14" rx="2"/><rect x="760" y="350" width="42" height="14" rx="2"/><rect x="812" y="350" width="42" height="14" rx="2"/>
+    </g>
+    <rect x="308" y="379" width="560" height="28" rx="6" class="section"/>
+    <text x="322" y="399" font-size="15" font-weight="600" data-max-width="300">Outputs</text>
+    <text x="854" y="398" text-anchor="end" class="mono muted" font-size="11" data-max-width="210">File · format · probe</text>
+    <rect x="308" y="415" width="560" height="32" rx="6" class="section"/>
+    <text x="322" y="436" font-size="15" font-weight="600" data-max-width="300">Test results</text>
+    <rect x="711" y="423" width="62" height="17" rx="4" fill="#0b2545"/>
+    <text x="742" y="435" text-anchor="middle" class="mono cyan" font-size="10" data-max-width="46">PASS</text>
+    <rect x="783" y="423" width="71" height="17" rx="4" fill="#0b2545" stroke="#f4a261" stroke-opacity=".6"/>
+    <text x="818" y="435" text-anchor="middle" class="mono" font-size="10" style="fill:#f4a261" data-max-width="55">FAIL</text>
+    <rect x="308" y="455" width="560" height="28" rx="6" class="section"/>
+    <text x="322" y="475" font-size="15" font-weight="600" data-max-width="300">Fixed in this pass</text>
+    <text x="854" y="474" text-anchor="end" class="muted" font-size="12" data-max-width="200">Issue → cause → fix</text>
+    <rect x="308" y="491" width="560" height="40" rx="6" class="section"/>
+    <text x="322" y="511" font-size="15" font-weight="600" data-max-width="300">Roadmap P1 / P2 / P3</text>
+    <text x="854" y="511" text-anchor="end" class="mono cyan" font-size="11" data-max-width="200">Evidence · approach · size</text>
+    <text x="322" y="524" class="muted" font-size="10" data-max-width="532">Not yet tested: keep the gaps visible.</text>
+    <rect x="308" y="539" width="560" height="40" rx="6" class="section"/>
+    <text x="322" y="560" font-size="15" font-weight="600" data-max-width="300">Run &amp; reproduce</text>
+    <text x="854" y="560" text-anchor="end" class="mono cyan" font-size="11" data-max-width="200">$ node tools/blueprint/…</text>
+    <path d="M322 569H572" stroke="#75d9ed" stroke-opacity=".2"/>
+  </g>
+  <g>
+    <path d="M248 192H290" fill="none" stroke="#75d9ed" stroke-opacity=".6"/>
+    <circle cx="290" cy="192" r="3" fill="#75d9ed"/>
+    <text x="40" y="172" font-size="23" font-weight="600" data-max-width="220">every number</text>
+    <text x="40" y="201" font-size="23" font-weight="600" data-max-width="220">from this run</text>
+    <text x="40" y="233" class="muted" font-size="14" data-max-width="220">Counts, probes and timings.</text>
+    <text x="40" y="255" class="muted" font-size="14" data-max-width="220">Measured, never guessed.</text>
+    <path d="M884 239H916" stroke="#75d9ed" stroke-opacity=".6"/>
+    <text x="930" y="218" font-size="20" font-weight="600" data-max-width="230">Local HTML + media</text>
+    <text x="930" y="247" class="muted" font-size="14" data-max-width="230">Real captures, clear captions.</text>
+    <text x="930" y="269" class="muted" font-size="14" data-max-width="230">Publishing is optional.</text>
+    <path d="M884 431H916" stroke="#f4a261" stroke-opacity=".7"/>
+    <circle cx="884" cy="431" r="3" fill="#f4a261"/>
+    <text x="930" y="420" font-size="23" font-weight="600" style="fill:#f4a261" data-max-width="230">failures shown</text>
+    <text x="930" y="449" font-size="23" font-weight="600" style="fill:#f4a261" data-max-width="230">plainly</text>
+    <text x="930" y="481" class="muted" font-size="14" data-max-width="230">Limits are part of the report.</text>
+    <text x="930" y="503" class="muted" font-size="14" data-max-width="230">Unverified is not passed.</text>
+    <text x="40" y="408" class="mono cyan" font-size="12" letter-spacing="1" data-max-width="220">FOLLOW THE EVIDENCE</text>
+    <text x="40" y="438" class="muted" font-size="15" data-max-width="220">Watch. Inspect. Reproduce.</text>
+    <path d="M40 458H240M40 452V464M240 452V464" stroke="#75d9ed" stroke-opacity=".3"/>
+  </g>
+  <text x="40" y="623" class="muted" font-size="13" data-max-width="1120">Illustrative product report · omit sections that do not apply · platform audits use a findings-led layout.</text>
+</svg>

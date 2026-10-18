@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" role="img" aria-labelledby="title desc">
+  <title id="title">The six-step visual improvement loop</title>
+  <desc id="desc">Capture before changing, validate and index, actually look, write findings, improve when authorized, close the loop. Screenshots saved does not equal a visual pass. Changed pixels are not proof of improvement.</desc>
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#75d9ed" stroke-opacity=".07"/></pattern>
+    <clipPath id="card"><rect width="1200" height="560" rx="24"/></clipPath>
+    <marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="#75d9ed" stroke-width="1.5"/></marker>
+  </defs>
+  <style>
+    text { font-family: -apple-system, "Segoe UI", Inter, Helvetica, Arial, sans-serif; fill: #f3f8ff; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; }
+    .muted { fill: #adcadf; } .cyan { fill: #75d9ed; }
+    .box { fill: #13315c; stroke: #75d9ed; stroke-opacity: .35; }
+    .number { fill: #0b2545; stroke: #75d9ed; stroke-opacity: .6; }
+  </style>
+  <rect width="1200" height="560" rx="24" fill="#0b2545"/>
+  <rect width="1200" height="560" fill="url(#grid)" clip-path="url(#card)"/>
+  <text x="40" y="46" class="mono cyan" font-size="12" letter-spacing="2" data-max-width="1100">03 / THE VISUAL IMPROVEMENT LOOP</text>
+  <text x="40" y="89" font-size="34" font-weight="700" data-max-width="1120">Evidence is the start. Looking is the work.</text>
+  <text x="40" y="120" class="muted" font-size="16" data-max-width="1120">Keep capture validity, visual review and behavioural checks separate.</text>
+  <g>
+    <rect x="40" y="150" width="336" height="128" rx="12" class="box"/>
+    <circle cx="76" cy="186" r="17" class="number"/>
+    <text x="76" y="191" text-anchor="middle" class="mono cyan" font-size="14" data-max-width="25">1</text>
+    <text x="105" y="193" font-size="20" font-weight="600" data-max-width="249">Capture before changing</text>
+    <text x="62" y="245" class="muted" font-size="15" data-max-width="292">Real states, sizes, themes and motion.</text>
+    <rect x="432" y="150" width="336" height="128" rx="12" class="box"/>
+    <circle cx="468" cy="186" r="17" class="number"/>
+    <text x="468" y="191" text-anchor="middle" class="mono cyan" font-size="14" data-max-width="25">2</text>
+    <text x="497" y="193" font-size="20" font-weight="600" data-max-width="249">Validate &amp; index</text>
+    <text x="454" y="245" class="muted" font-size="14" data-max-width="292">Decode PNGs; bind IDs, inputs and hashes.</text>
+    <rect x="824" y="150" width="336" height="128" rx="12" class="box"/>
+    <circle cx="860" cy="186" r="17" class="number"/>
+    <text x="860" y="191" text-anchor="middle" class="mono cyan" font-size="14" data-max-width="25">3</text>
+    <text x="889" y="193" font-size="20" font-weight="600" data-max-width="249">Actually look</text>
+    <text x="846" y="245" class="muted" font-size="14" data-max-width="292">Open every sheet; inspect suspicious crops.</text>
+    <rect x="824" y="326" width="336" height="128" rx="12" class="box"/>
+    <circle cx="860" cy="362" r="17" class="number"/>
+    <text x="860" y="367" text-anchor="middle" class="mono cyan" font-size="14" data-max-width="25">4</text>
+    <text x="889" y="369" font-size="20" font-weight="600" data-max-width="249">Write findings</text>
+    <text x="846" y="421" class="muted" font-size="16" data-max-width="292">Image + impact + fix + verification.</text>
+    <rect x="432" y="326" width="336" height="128" rx="12" class="box"/>
+    <circle cx="468" cy="362" r="17" class="number"/>
+    <text x="468" y="367" text-anchor="middle" class="mono cyan" font-size="14" data-max-width="25">5</text>
+    <text x="497" y="369" font-size="20" font-weight="600" data-max-width="249">Improve when authorized</text>
+    <text x="454" y="421" class="muted" font-size="16" data-max-width="292">Scope one fix; test and re-capture.</text>
+    <rect x="40" y="326" width="336" height="128" rx="12" class="box"/>
+    <circle cx="76" cy="362" r="17" class="number"/>
+    <text x="76" y="367" text-anchor="middle" class="mono cyan" font-size="14" data-max-width="25">6</text>
+    <text x="105" y="369" font-size="20" font-weight="600" data-max-width="249">Close the loop</text>
+    <text x="62" y="421" class="muted" font-size="16" data-max-width="292">Re-review; record what remains.</text>
+  </g>
+  <g fill="none" stroke="#75d9ed" stroke-width="1.5" marker-end="url(#arrow)">
+    <path d="M382 214H425"/><path d="M774 214H817"/><path d="M992 284V319"/>
+    <path d="M818 390H775"/><path d="M426 390H383"/>
+    <path d="M34 390H20V214H33" stroke-dasharray="4 5" stroke-opacity=".6"/>
+  </g>
+  <rect x="40" y="484" width="1120" height="44" rx="9" fill="#13315c" stroke="#f4a261" stroke-opacity=".6"/>
+  <rect x="40" y="495" width="3" height="22" rx="1.5" fill="#f4a261"/>
+  <text x="62" y="513" font-size="23" font-weight="600" style="fill:#f4a261" data-max-width="525">Screenshots saved ≠ visual pass</text>
+  <text x="1140" y="511" text-anchor="end" class="muted" font-size="14" data-max-width="510">Changed pixels are not proof of improvement.</text>
+</svg>

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+  <title id="title">From a real run to a reproducible report</title>
+  <desc id="desc">Harness scripts drive the real app in Chrome, write raw evidence, then visual review informs a local HTML report and optional publishing. Authorized fixes loop back to re-capture. Platform audits also use repository evidence.</desc>
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#75d9ed" stroke-opacity=".07"/></pattern>
+    <clipPath id="card"><rect width="1200" height="520" rx="24"/></clipPath>
+    <marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="#75d9ed" stroke-width="1.5"/></marker>
+    <marker id="warm-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="#f4a261" stroke-width="1.5"/></marker>
+  </defs>
+  <style>
+    text { font-family: -apple-system, "Segoe UI", Inter, Helvetica, Arial, sans-serif; fill: #f3f8ff; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; }
+    .muted { fill: #adcadf; } .cyan { fill: #75d9ed; }
+    .box { fill: #13315c; stroke: #75d9ed; stroke-opacity: .35; }
+  </style>
+  <rect width="1200" height="520" rx="24" fill="#0b2545"/>
+  <rect width="1200" height="520" fill="url(#grid)" clip-path="url(#card)"/>
+  <text x="40" y="47" class="mono cyan" font-size="12" letter-spacing="2" data-max-width="1000">01 / HOW IT WORKS</text>
+  <text x="40" y="89" font-size="34" font-weight="700" data-max-width="1100">Run the real thing. Keep the evidence.</text>
+  <text x="40" y="120" font-size="17" class="muted" data-max-width="1100">Product path shown below. Platform audits add repository, history and findings-led evidence.</text>
+  <g>
+    <rect x="40" y="169" width="208" height="195" rx="12" class="box"/>
+    <text x="60" y="199" class="mono cyan" font-size="12" data-max-width="168">01 / DRIVE</text>
+    <text x="60" y="236" font-size="24" font-weight="600" data-max-width="168">Harness</text>
+    <text x="60" y="269" class="mono" font-size="13" data-max-width="168">tools/blueprint/</text>
+    <text x="60" y="290" class="mono" font-size="13" data-max-width="168">*.mjs</text>
+    <text x="60" y="322" class="muted" font-size="15" data-max-width="168">Real app · real Chrome</text>
+    <text x="60" y="344" class="muted" font-size="14" data-max-width="168">Explicit test fixtures</text>
+    <rect x="268" y="169" width="208" height="195" rx="12" class="box"/>
+    <text x="288" y="199" class="mono cyan" font-size="12" data-max-width="168">02 / CAPTURE</text>
+    <text x="288" y="236" font-size="24" font-weight="600" data-max-width="168">Raw evidence</text>
+    <text x="288" y="269" class="mono" font-size="13" data-max-width="168">blueprint-out/</text>
+    <text x="288" y="300" class="muted" font-size="15" data-max-width="168">Screenshots, recordings</text>
+    <text x="288" y="322" class="muted" font-size="15" data-max-width="168">Exports + JSON checks</text>
+    <text x="288" y="344" class="muted" font-size="14" data-max-width="168">Fresh, preserved runs</text>
+    <rect x="496" y="169" width="208" height="195" rx="12" class="box"/>
+    <text x="516" y="199" class="mono cyan" font-size="12" data-max-width="168">03 / INSPECT</text>
+    <text x="516" y="236" font-size="24" font-weight="600" data-max-width="168">Visual review</text>
+    <text x="516" y="269" font-size="15" data-max-width="168">Contact sheets + crops</text>
+    <text x="516" y="300" class="muted" font-size="15" data-max-width="168">Actually look at pixels</text>
+    <text x="516" y="322" class="muted" font-size="15" data-max-width="168">Image-bound findings</text>
+    <text x="516" y="344" class="muted" font-size="14" data-max-width="168">No silent visual passes</text>
+    <rect x="724" y="169" width="208" height="195" rx="12" class="box"/>
+    <text x="744" y="199" class="mono cyan" font-size="12" data-max-width="168">04 / EXPLAIN</text>
+    <text x="744" y="236" font-size="24" font-weight="600" data-max-width="168">Report</text>
+    <text x="744" y="269" class="mono" font-size="13" data-max-width="168">docs/blueprint/</text>
+    <text x="744" y="300" class="muted" font-size="15" data-max-width="168">Local HTML + media</text>
+    <text x="744" y="322" class="muted" font-size="15" data-max-width="168">Results, limits, roadmap</text>
+    <text x="744" y="344" class="muted" font-size="14" data-max-width="168">Exact reproduce steps</text>
+    <rect x="952" y="169" width="208" height="195" rx="12" fill="#0b2545" stroke="#75d9ed" stroke-opacity=".5" stroke-dasharray="5 5"/>
+    <text x="972" y="199" class="mono cyan" font-size="12" data-max-width="168">05 / OPTIONAL</text>
+    <text x="972" y="236" font-size="24" font-weight="600" data-max-width="168">Publish</text>
+    <text x="972" y="269" font-size="15" data-max-width="168">Only when requested</text>
+    <text x="972" y="300" class="muted" font-size="15" data-max-width="168">Publisher available?</text>
+    <text x="972" y="322" class="muted" font-size="15" data-max-width="168">Keep the stable URL</text>
+    <text x="972" y="344" class="muted" font-size="14" data-max-width="168">Local delivery is valid</text>
+  </g>
+  <g fill="none" stroke="#75d9ed" stroke-width="1.5" marker-end="url(#arrow)">
+    <path d="M250 265H265"/><path d="M478 265H493"/><path d="M706 265H721"/><path d="M934 265H949"/>
+  </g>
+  <path d="M600 366V410H144V367" fill="none" stroke="#f4a261" stroke-width="1.5" marker-end="url(#warm-arrow)"/>
+  <text x="175" y="440" font-size="16" fill="#f4a261" style="fill:#f4a261" data-max-width="850">fix → re-capture · authorized changes only · identical inputs</text>
+  <path d="M40 462H1160" stroke="#75d9ed" stroke-opacity=".2"/>
+  <text x="40" y="492" class="mono muted" font-size="14" data-max-width="1120">REPORT SOURCE / docs/blueprint/&lt;project&gt;-blueprint.html + media/</text>
+</svg>

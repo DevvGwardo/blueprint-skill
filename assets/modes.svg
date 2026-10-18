@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">Three ways to run Blueprint</title>
+  <desc id="desc">Bootstrap: inventory, build and run the harness, write the report. Feature pass: add feature checks, run regressions and authorized fixes, update the owning report. Refresh: re-run scripts, re-measure and remove stale claims, refresh the report. Choose Product or Platform audit. Publishing requires permission.</desc>
+  <defs>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#75d9ed" stroke-opacity=".07"/></pattern>
+    <clipPath id="card"><rect width="1200" height="420" rx="24"/></clipPath>
+  </defs>
+  <style>
+    text { font-family: -apple-system, "Segoe UI", Inter, Helvetica, Arial, sans-serif; fill: #f3f8ff; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; }
+    .muted { fill: #adcadf; } .cyan { fill: #75d9ed; }
+  </style>
+  <rect width="1200" height="420" rx="24" fill="#0b2545"/>
+  <rect width="1200" height="420" fill="url(#grid)" clip-path="url(#card)"/>
+  <text x="40" y="43" class="mono cyan" font-size="12" letter-spacing="2" data-max-width="800">02 / PICK THE MODE</text>
+  <text x="40" y="84" font-size="32" font-weight="700" data-max-width="1120">Start fresh. Go deeper. Stay current.</text>
+  <g>
+    <rect x="40" y="111" width="360" height="220" rx="12" fill="#13315c" stroke="#75d9ed" stroke-opacity=".35"/>
+    <text x="62" y="147" font-size="27" font-weight="600" data-max-width="316">Bootstrap</text>
+    <text x="62" y="179" class="mono cyan" font-size="14" data-max-width="316">“make a blueprint for X”</text>
+    <path d="M62 201H378" stroke="#75d9ed" stroke-opacity=".2"/>
+    <text x="62" y="230" class="mono cyan" font-size="13" data-max-width="25">01</text>
+    <text x="95" y="230" font-size="16" data-max-width="283">Inventory the repo</text>
+    <text x="62" y="265" class="mono cyan" font-size="13" data-max-width="25">02</text>
+    <text x="95" y="265" font-size="16" data-max-width="283">Build + run the harness</text>
+    <text x="62" y="300" class="mono cyan" font-size="13" data-max-width="25">03</text>
+    <text x="95" y="300" font-size="16" data-max-width="283">Write the local report</text>
+    <rect x="420" y="111" width="360" height="220" rx="12" fill="#13315c" stroke="#75d9ed" stroke-opacity=".35"/>
+    <text x="442" y="147" font-size="27" font-weight="600" data-max-width="316">Feature pass</text>
+    <text x="442" y="179" class="mono cyan" font-size="14" data-max-width="316">“run &lt;feature&gt; through the blueprint”</text>
+    <path d="M442 201H758" stroke="#75d9ed" stroke-opacity=".2"/>
+    <text x="442" y="230" class="mono cyan" font-size="13" data-max-width="25">01</text>
+    <text x="475" y="230" font-size="16" data-max-width="283">Add feature checks</text>
+    <text x="442" y="265" class="mono cyan" font-size="13" data-max-width="25">02</text>
+    <text x="475" y="265" font-size="15" data-max-width="283">Run regressions; fix with permission</text>
+    <text x="442" y="300" class="mono cyan" font-size="13" data-max-width="25">03</text>
+    <text x="475" y="300" font-size="16" data-max-width="283">Update the owning report</text>
+    <rect x="800" y="111" width="360" height="220" rx="12" fill="#13315c" stroke="#75d9ed" stroke-opacity=".35"/>
+    <text x="822" y="147" font-size="27" font-weight="600" data-max-width="316">Refresh</text>
+    <text x="822" y="179" class="mono cyan" font-size="14" data-max-width="316">“update the blueprint”</text>
+    <path d="M822 201H1138" stroke="#75d9ed" stroke-opacity=".2"/>
+    <text x="822" y="230" class="mono cyan" font-size="13" data-max-width="25">01</text>
+    <text x="855" y="230" font-size="16" data-max-width="283">Re-run every script</text>
+    <text x="822" y="265" class="mono cyan" font-size="13" data-max-width="25">02</text>
+    <text x="855" y="265" font-size="16" data-max-width="283">Re-measure; drop stale claims</text>
+    <text x="822" y="300" class="mono cyan" font-size="13" data-max-width="25">03</text>
+    <text x="855" y="300" font-size="16" data-max-width="283">Refresh report + media</text>
+  </g>
+  <rect x="40" y="349" width="1120" height="34" rx="8" fill="#0b2545" stroke="#75d9ed" stroke-opacity=".25"/>
+  <text x="58" y="371" class="cyan" font-size="15" font-weight="600" data-max-width="95">Two flavours</text>
+  <path d="M169 358V374M574 358V374" stroke="#75d9ed" stroke-opacity=".3"/>
+  <text x="189" y="371" font-size="15" data-max-width="365">Product · UI, renders, exports</text>
+  <text x="594" y="371" font-size="15" data-max-width="545">Platform audit · repo, services, findings</text>
+  <circle cx="44" cy="401" r="3" fill="#f4a261"/>
+  <text x="56" y="405" class="muted" font-size="12" data-max-width="1080">Check for an existing blueprint first. Publishing is optional and requires permission.</text>
+</svg>

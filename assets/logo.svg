@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">Blueprint mark</title>
+  <desc id="desc">A folded drafting sheet with a cyan grid, a white check and an amber registration point on a deep blue card.</desc>
+  <defs>
+    <pattern id="grid" width="16" height="16" patternUnits="userSpaceOnUse">
+      <path d="M16 0H0V16" fill="none" stroke="#75d9ed" stroke-opacity=".13" stroke-width="1"/>
+    </pattern>
+    <clipPath id="sheet"><path d="M72 44H152L184 76V204H72Z"/></clipPath>
+  </defs>
+  <rect width="256" height="256" rx="36" fill="#0b2545"/>
+  <rect x="12.5" y="12.5" width="231" height="231" rx="26" fill="none" stroke="#75d9ed" stroke-opacity=".22"/>
+  <g fill="none" stroke="#75d9ed" stroke-width="1" opacity=".5">
+    <path d="M48 44V204M42 44H54M42 204H54M72 224H184M72 218V230M184 218V230"/>
+    <path d="M42 50L54 38M42 210L54 198M66 230L78 218M178 230L190 218"/>
+  </g>
+  <path d="M72 44H152L184 76V204H72Z" fill="#13315c" stroke="#75d9ed" stroke-width="2.5" stroke-linejoin="round"/>
+  <rect x="72" y="44" width="112" height="160" fill="url(#grid)" clip-path="url(#sheet)"/>
+  <path d="M152 44V76H184" fill="#0b2545" stroke="#75d9ed" stroke-width="2.5" stroke-linejoin="round"/>
+  <g fill="none" stroke="#75d9ed">
+    <circle cx="128" cy="132" r="31" stroke-opacity=".6"/>
+    <path d="M88 132H104M152 132H168M128 92V108M128 156V172" stroke-width="1.5"/>
+  </g>
+  <path d="M109 133L122 146L149 115" fill="none" stroke="#f3f8ff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M88 184H135" stroke="#75d9ed" stroke-width="2" stroke-linecap="round" stroke-dasharray="4 5"/>
+  <rect x="156" y="179" width="10" height="10" rx="2" fill="#f4a261"/>
+</svg>
