@@ -72,6 +72,9 @@ python3 /absolute/blueprint/scripts/visual_blueprint.py \
 Omit baseline/history flags for a first-pass review. Attempts get unique response directories;
 capture manifests and PNGs are never replaced. A malformed response stays blocked, even
 when the CLI exits zero. Do not recapture merely because a model returned truncated JSON.
+Imported partial/blocked reviews use unique `visual-review-attempt-<uuid>.json` and `.html`
+files. Resume the same directory with another response; only a complete import reserves
+`visual-review.json` and `visual-review.html`, which cannot be overwritten.
 
 ## The gallery
 
@@ -80,6 +83,11 @@ python3 /absolute/blueprint/scripts/visual_evidence.py /absolute/repo/blueprint-
 ```
 
 This validates every image (decodes it, checks its hash) and prints the fresh review directory.
+The evidence manifest uses `evidenceVersion: 2`, freezing the exact report digest and
+source ID → canonical-path/hash mapping in `captureBinding`, plus `baselineBinding` when
+comparing runs. Resume/import verifies these bindings and sheet hashes before accepting
+review results. Galleries without binding metadata are blocked, not upgraded by trusting
+their current source files: preserve them and build/inspect a fresh run/gallery.
 Open its `index.html` locally, or open the contact sheets with your image tool. It holds
 per-group contact sheets, sampled GIFs for timed sequences, nearest-neighbour inspection
 zooms (labelled as zooms), raw PNGs, hashes, and coverage checks.
@@ -119,7 +127,8 @@ python3 /absolute/blueprint/scripts/visual_evidence.py \
 
 Only mark all sheets reviewed when every expected sheet is explicitly included. Keep raw
 capture evidence immutable; write visual-review results separately. The importer creates a
-readable `visual-review.html` with the exact cited source frames and links it from the gallery.
+readable HTML with the exact cited source frames and links it from the gallery. Follow the
+returned review path for versioned incomplete attempts; complete results use `visual-review.html`.
 
 ## Findings that guide an actual improvement
 
@@ -146,7 +155,13 @@ image IDs/hashes and carry `resolved`, `persistent`, `dismissed`, or `unverified
 carry `new`. A previous finding absent from the next response remains **unverified**, never
 automatically resolved. Resolution/dismissal requires a complete review with the actual
 matched baseline. "Resolved" is a visual judgment, not proof of native integration or behaviour.
-Legacy reviews without keys remain readable using their existing IDs.
+The `tracking` ledger retains full outstanding issue records, including observations,
+proposed fixes, verification steps, source IDs/hashes and capture-report provenance. Both
+history generation and recheck prompts use that ledger, not just the latest `findings`.
+Legacy reviews without keys remain readable using their existing IDs. Older compact
+tracking records are recovered through their saved `previousReview` chain; missing or
+cyclic chains block history import rather than dropping unresolved issues. A legacy review
+without a capture binding cannot authorize resolution/dismissal against a matched baseline.
 
 ## Matched re-capture and comparison
 

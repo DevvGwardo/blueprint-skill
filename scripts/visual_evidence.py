@@ -4,16 +4,18 @@ import argparse
 from collections import defaultdict
 import hashlib
 import html
+from io import BytesIO
 import json
 import os
 from pathlib import Path
 import re
+from uuid import uuid4
 
 from PIL import Image, ImageChops, ImageDraw, ImageStat
 
 
-def load_frames(report_path):
-    report = json.loads(report_path.read_text())
+def load_frames(report_path, report_bytes=None):
+    report = json.loads(report_path.read_bytes() if report_bytes is None else report_bytes)
     if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,127}", report.get("run", "")):
         raise ValueError("Report needs a safe unique run ID")
     entries = report.get("screenshots", [])
@@ -26,13 +28,14 @@ def load_frames(report_path):
         if entry["id"] in ids:
             raise ValueError(f'Duplicate evidence ID: {entry["id"]}')
         ids.add(entry["id"])
-        path = Path(entry["path"])
-        digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        path = Path(entry["path"]).resolve()
+        pixels = path.read_bytes()
+        digest = hashlib.sha256(pixels).hexdigest()
         if digest != entry["sha256"]:
             raise ValueError(f'Image hash mismatch: {entry["id"]}')
-        with Image.open(path) as image:
+        with Image.open(BytesIO(pixels)) as image:
             image.verify()
-        with Image.open(path) as image:
+        with Image.open(BytesIO(pixels)) as image:
             image.load()
             rgb = image.convert("RGB")
             if image.format != "PNG":
@@ -42,8 +45,40 @@ def load_frames(report_path):
                 raise ValueError(f'Declared dimensions differ: {entry["id"]}')
             if min(image.size) < 2 or all(lo == hi for lo, hi in rgb.getextrema()):
                 raise ValueError(f'Blank image: {entry["id"]}')
-            frames.append({**entry, "width": image.width, "height": image.height, "image": rgb.copy()})
+            frames.append({**entry, "path": str(path), "width": image.width, "height": image.height, "image": rgb.copy()})
     return report, frames
+
+
+def read_capture(report_path, expected=None):
+    """Hash the same manifest bytes and source pixels that are decoded."""
+    raw = report_path.read_bytes()
+    digest = hashlib.sha256(raw).hexdigest()
+    if expected is not None and expected.get("reportSha256") != digest:
+        raise ValueError("Capture report changed after evidence assembly")
+    report, frames = load_frames(report_path, raw)
+    binding = {"reportSha256": digest, "sourceImages": {
+        frame["id"]: {"path": frame["path"], "sha256": frame["sha256"]} for frame in frames}}
+    if expected is not None and binding != expected:
+        raise ValueError("Source image binding changed after evidence assembly")
+    return report, frames, binding
+
+
+def validate_evidence(summary):
+    binding = summary.get("captureBinding")
+    if not isinstance(binding, dict):
+        raise ValueError("Evidence lacks immutable capture binding; preserve it and build a fresh run/gallery")
+    report, frames, _ = read_capture(Path(summary["captureReport"]), binding)
+    if report["run"] != summary["run"]:
+        raise ValueError("Evidence run differs from its bound capture")
+    if summary.get("baselineCaptureReport"):
+        baseline_binding = summary.get("baselineBinding")
+        if not isinstance(baseline_binding, dict):
+            raise ValueError("Evidence lacks immutable baseline binding; build a fresh run/gallery")
+        read_capture(Path(summary["baselineCaptureReport"]), baseline_binding)
+    for asset in summary["assets"]:
+        if hashlib.sha256(Path(asset["sheet"]).read_bytes()).hexdigest() != asset.get("sha256"):
+            raise ValueError("Review sheet changed after evidence assembly")
+    return frames
 
 
 def measurements(frames):
@@ -93,11 +128,13 @@ def sheet(frames, target, cols=3):
 
 
 def build(report_path, baseline=None):
-    report, frames = load_frames(report_path)
+    report_path = report_path.resolve()
+    baseline = baseline.resolve() if baseline else None
+    report, frames, binding = read_capture(report_path)
     metrics = measurements(frames)
     old = None
     if baseline:
-        previous, old_frames = load_frames(baseline)
+        previous, old_frames, baseline_binding = read_capture(baseline)
         if previous.get("method") != report.get("method") or previous.get("character") != report.get("character"):
             raise ValueError("Baseline capture settings/character differ; rerun with matched inputs")
         old = {frame["id"]: frame for frame in old_frames}
@@ -179,13 +216,16 @@ def build(report_path, baseline=None):
                            "frames": len(paired), "imageIds": [f["id"].removeprefix("AFTER ") for f in paired if f["id"].startswith("AFTER ")],
                            "sha256": hashlib.sha256(png.read_bytes()).hexdigest()})
     summary = {
+        "evidenceVersion": 2, "captureBinding": binding,
         "captureReport": str(report_path), "run": report["run"], "status": "evidence_ready",
         "imageCount": len(frames), "assets": assets, "motion": motion, "comparisons": comparisons,
         "comparisonImages": comparison_images,
         "visualReview": "pending", "findings": [], "reviewedImageIds": [],
         "limits": report.get("limits", []), "character": report.get("character"), "measurements": metrics,
         "baselineCaptureReport": str(baseline) if baseline else None,
+        "baselineBinding": baseline_binding if baseline else None,
     }
+    validate_evidence(summary)
     (out / "evidence.json").write_text(json.dumps(summary, indent=2) + "\n")
     cards = []
     for asset in assets:
@@ -199,7 +239,8 @@ def build(report_path, baseline=None):
         '<style>body{background:#151519;color:#eee;font:16px system-ui;margin:32px}'
         'img{max-width:100%;display:block;margin:12px 0}section{margin-bottom:48px}</style>'
         f'<h1>{html.escape(report["run"])}</h1><p>{len(frames)} validated captured images. '
-        'Visual review pending. Sampled GIFs are not live recordings; fixtures are not native UI proof.</p>'
+        '<!-- visual-review:start -->Visual review pending.<!-- visual-review:end --> '
+        'Sampled GIFs are not live recordings; fixtures are not native UI proof.</p>'
         + "".join(cards)
     )
     return summary, out
@@ -213,7 +254,7 @@ def review_prompt(out, previous_review=None, assets=None):
     if previous_review:
         data = json.loads(previous_review.read_text())
         available = {name for asset in assets for name in asset.get("imageIds", [])}
-        items = [f for f in data.get("findings", []) if available.intersection(f["imageIds"])]
+        items = [f for f in active_findings(data).values() if available.intersection(f.get("imageIds", []))]
         # Keep the handoff bounded: old paths/hashes are validated by the importer, not the model.
         items = [{k: f[k] for k in ["id", "key", "imageIds", "observation", "verification"] if k in f} for f in items]
         matched_ids = {name for asset in assets if asset["group"].startswith("Matched BEFORE / AFTER")
@@ -253,8 +294,36 @@ Keep keys stable across runs. Separate a fixture limitation or intentional pose 
 """
 
 
+def active_findings(review, seen=None):
+    """Read full outstanding records, recovering older compact ledgers when possible."""
+    records = {f.get("key", f["id"]): {**f, "captureReport": review.get("captureReport")}
+               for f in review.get("findings", [])}
+    ancestors = None
+    required = {"id", "imageIds", "severity", "observation", "proposedFix", "verification"}
+    for item in review.get("tracking", []):
+        key = item["key"]
+        if item["status"] in {"resolved", "dismissed"}:
+            records.pop(key, None)
+            continue
+        record = {**records.get(key, {}), **item}
+        if not required <= record.keys():
+            if ancestors is None:
+                parent = review.get("previousReview")
+                seen = set() if seen is None else seen
+                if not parent or str(Path(parent).resolve()) in seen:
+                    raise ValueError("Incomplete legacy finding history; full previous issue records are required")
+                parent = Path(parent).resolve()
+                ancestors = active_findings(json.loads(parent.read_text()), seen | {str(parent)})
+            record = {**ancestors.get(key, {}), **record}
+        if not required <= record.keys():
+            raise ValueError("Incomplete legacy finding history; full previous issue records are required")
+        records[key] = record
+    return records
+
+
 def track_findings(response, previous, by_id, matched):
-    old = {f.get("key", f["id"]): f for f in previous["findings"]}
+    old = active_findings(previous)
+    current = {f.get("key", f["id"]): f for f in response["findings"]}
     rechecks = response.get("rechecks", [])
     if not isinstance(rechecks, list):
         raise ValueError("Rechecks must be a list")
@@ -268,17 +337,25 @@ def track_findings(response, previous, by_id, matched):
             raise ValueError("Finding recheck needs current evidence and rationale")
         if item["status"] in {"resolved", "dismissed"} and (not matched or response["visualReview"] != "reviewed"):
             raise ValueError("Resolution/dismissal requires complete matched visual review")
+        if item["status"] in {"resolved", "dismissed"} and key in current:
+            raise ValueError("A current finding cannot also be resolved or dismissed")
         seen.add(key)
-        ledger.append({**item, "previousId": old[key]["id"], "basis": "visual review, not behavioral proof",
+        ledger.append({**old[key], **current.get(key, {}), "key": key, "status": item["status"],
+                       "imageIds": ids, "reason": item["reason"],
+                       "captureReport": response.get("captureReport"), "previousId": old[key]["id"],
+                       "basis": "visual review, not behavioral proof",
                        "imageHashes": {name: by_id[name]["sha256"] for name in ids}})
-    for key in old.keys() - seen:
-        ledger.append({"key": key, "status": "unverified", "previousId": old[key]["id"],
-                       "reason": "Not explicitly rechecked; absence is not resolution."})
+    for key in sorted(old.keys() - seen):
+        ledger.append({**old[key], **current.get(key, {}), "key": key,
+                       "status": "persistent" if key in current else "unverified",
+                       "captureReport": response.get("captureReport") if key in current else old[key].get("captureReport"),
+                       "previousId": old[key]["id"],
+                       "reason": "Reported again in current evidence." if key in current else
+                                 "Not explicitly rechecked; absence is not resolution."})
     for finding in response["findings"]:
         key = finding.get("key", finding["id"])
         if key not in old:
-            ledger.append({"key": key, "status": "new", "id": finding["id"],
-                           "imageIds": finding["imageIds"], "imageHashes": finding["imageHashes"]})
+            ledger.append({**finding, "key": key, "status": "new", "captureReport": response.get("captureReport")})
     return ledger
 
 
@@ -331,18 +408,28 @@ def merge_reviews(responses, expected):
 
 
 def import_review(response_path, out, previous_review=None):
+    # Serialize imports so an incomplete attempt cannot replace a completed gallery link.
+    lock = out / ".review-import.lock"
+    with lock.open("x"):
+        pass
+    try:
+        if (out / "visual-review.json").exists():
+            raise FileExistsError("This capture already has an imported review; preserve it")
+        return _import_review(response_path, out, previous_review)
+    finally:
+        lock.unlink()
+
+
+def _import_review(response_path, out, previous_review=None):
     response = parse_response(json.loads(response_path.read_text()))
     summary = json.loads((out / "evidence.json").read_text())
     known_sheets = {asset["sheet"] for asset in summary["assets"]}
-    for asset in summary["assets"]:
-        if asset.get("sha256") and hashlib.sha256(Path(asset["sheet"]).read_bytes()).hexdigest() != asset["sha256"]:
-            raise ValueError("Review sheet changed after evidence assembly")
+    frames = validate_evidence(summary)
     reviewed = response.get("reviewedSheets", [])
     if not isinstance(reviewed, list) or not set(reviewed) <= known_sheets:
         raise ValueError("Reviewer references unknown sheets")
     if response["visualReview"] == "reviewed" and set(reviewed) != known_sheets:
         raise ValueError("Reviewer claimed complete review without listing every sheet")
-    _, frames = load_frames(Path(summary["captureReport"]))
     by_id = {frame["id"]: frame for frame in frames}
     findings = response.get("findings", [])
     if not isinstance(findings, list):
@@ -363,25 +450,33 @@ def import_review(response_path, out, previous_review=None):
         if not isinstance(key, str) or not key.strip() or key in keys:
             raise ValueError("Finding keys must be unique nonempty strings")
         keys.add(key)
-    result = {**response, "findings": findings, "run": summary["run"],
+    # History links and ledger records are importer-owned, never reviewer-supplied.
+    review_fields = {key: response[key] for key in
+                     ["visualReview", "reviewedSheets", "rechecks", "strengths", "notReviewed"] if key in response}
+    result = {**review_fields, "findings": findings, "run": summary["run"],
+              "captureBinding": summary["captureBinding"],
               "rawResponse": str(response_path), "captureReport": summary["captureReport"],
               "reviewedImageIds": sorted({key for asset in summary["assets"] if asset["sheet"] in reviewed
                                          for key in asset.get("imageIds", [])})}
     if previous_review:
         previous = json.loads(previous_review.read_text())
-        load_frames(Path(previous["captureReport"]))
-        matched = summary.get("baselineCaptureReport") == previous["captureReport"]
+        previous_binding = previous.get("captureBinding")
+        read_capture(Path(previous["captureReport"]), previous_binding)
+        matched = (previous_binding is not None and
+                   summary.get("baselineCaptureReport") == previous["captureReport"] and
+                   summary.get("baselineBinding") == previous_binding)
         result["tracking"] = track_findings(result, previous, by_id, matched)
         result["previousReview"] = str(previous_review)
-    target = out / "visual-review.json"
+    target = out / ("visual-review.json" if result["visualReview"] == "reviewed"
+                    else f"visual-review-attempt-{uuid4()}.json")
     with target.open("x") as file:
         json.dump(result, file, indent=2)
         file.write("\n")
-    render_review(result, by_id, out)
+    render_review(result, by_id, out, target.with_suffix(".html"))
     return result, target
 
 
-def render_review(result, by_id, out):
+def render_review(result, by_id, out, target):
     sections = []
     for finding in result["findings"]:
         evidence = "".join(
@@ -397,7 +492,7 @@ def render_review(result, by_id, out):
         )
     ledger = "".join(f'<li>{html.escape(item["key"])}: {html.escape(item["status"])}. '
                      f'{html.escape(item.get("reason", ""))}</li>' for item in result.get("tracking", []))
-    (out / "visual-review.html").write_text(
+    target.write_text(
         '<!doctype html><meta charset="utf-8"><title>Visual Blueprint findings</title>'
         '<style>body{background:#151519;color:#eee;font:16px system-ui;margin:32px;max-width:1200px}'
         'img{max-width:100%}figure{margin:20px 0}section{margin:48px 0}p{max-width:80ch}</style>'
@@ -407,11 +502,11 @@ def render_review(result, by_id, out):
         + (f'<h2>Finding history</h2><ul>{ledger}</ul>' if ledger else "") + "".join(sections)
     )
     index = out / "index.html"
-    index.write_text(index.read_text().replace(
-        "Visual review pending.",
-        f'Visual review: {html.escape(result["visualReview"])}. '
-        '<a href="visual-review.html">Open image-bound findings</a>.'
-    ))
+    status = (f'Visual review: {html.escape(result["visualReview"])}. '
+              f'<a href="{target.name}">Open image-bound findings</a>.')
+    index.write_text(re.sub(
+        r"(?<=<!-- visual-review:start -->).*?(?=<!-- visual-review:end -->)",
+        lambda _: status, index.read_text(), flags=re.DOTALL))
 
 
 def main():

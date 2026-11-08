@@ -44,7 +44,7 @@ def workflow(args):
         out = args.review_dir.resolve()
         summary = json.loads((out / "evidence.json").read_text())
         report_path = Path(summary["captureReport"])
-        visual_evidence.load_frames(report_path)
+        visual_evidence.validate_evidence(summary)
     elif args.report:
         report_path = args.report.resolve()
     else:

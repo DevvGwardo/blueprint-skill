@@ -186,6 +186,12 @@ REVIEW_DIR="/absolute/repo/blueprint-out/review/<run>"
 
 Open the returned gallery's `index.html` and the images. Building a gallery leaves visual review pending. Evidence assembly uses a fresh review directory for each run; resume an existing review instead of rebuilding over it.
 
+Assembly freezes the capture-report SHA-256 and each source image's ID, canonical path and
+hash in `evidence.json` (`captureBinding`; also `baselineBinding` for comparisons).
+Resume/import rejects changes to those reports, PNGs or contact sheets. Older galleries
+without these bindings cannot be verified retroactively: preserve them, build a fresh
+run/gallery, and inspect it again rather than silently accepting an unbound review.
+
 ### Capture and review: `scripts/visual_blueprint.py`
 
 | Entry point | Example |
@@ -203,6 +209,13 @@ Open the returned gallery's `index.html` and the images. Building a gallery leav
 
 **Exit codes:** no reviewer means manual review is pending, with exit **2**, not a visual pass. Exit **0** requires an imported complete review; partial, denied or malformed reviews remain incomplete/blocked. Setup errors can exit **1**. Complete image review does not mean all product checks passed or every finding was fixed.
 
+Imported partial/blocked results are preserved as unique `visual-review-attempt-<uuid>.json`
+and `.html` files, so the same bound gallery can resume without recapture. Only a complete
+review creates the immutable `visual-review.json` / `.html`; subsequent imports cannot
+replace it. Follow the exact returned `review` path for incomplete attempts.
+Outstanding finding records survive every generation of `--previous-review` history and
+remain in recheck prompts until explicitly resolved or dismissed.
+
 ### Templates
 
 These are starting points to copy and adapt, not finished audits. Replace TODOs/placeholders and configure the project's ready condition, fixtures, test hook and checks.
@@ -219,7 +232,7 @@ These are starting points to copy and adapt, not finished audits. Replace TODOs/
 From this skill repository, with Pillow installed:
 
 ```sh
-cd scripts && python3 -m unittest test_visual_evidence test_visual_blueprint
+cd scripts && python3 -m unittest discover
 ```
 
 The tests use temporary image fixtures and mocked provider calls. They cover validation, comparisons, review coverage, capture-result handling and finding history, not your app's behaviour.
@@ -245,6 +258,7 @@ blueprint-skill/
     ├── visual_evidence.py
     ├── visual_blueprint.py
     ├── test_visual_evidence.py
+    ├── test_review_regressions.py
     └── test_visual_blueprint.py
 ```
 
